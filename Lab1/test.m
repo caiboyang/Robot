@@ -12,7 +12,7 @@ p4=[0.817;1.366;16.683;1];
 T01=[1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1]*[1 0 0 0; 0 1 0 0; 0 0 1 d1; 0 0 0 1];
 T12=[1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1]*[1 0 0 0; 0 1 0 0; 0 0 1 d2; 0 0 0 1];
 T23=[1 0 0 0; 0 0 1 0; 0 -1 0 0; 0 0 0 1]*[cos(theta3) -sin(theta3) 0 0; sin(theta3) cos(theta3) 0 0; 0 0 1 0; 0 0 0 1];
-T34=[1 0 0 0; 0 0 -1 0; 0 1 0 0; 0 0 0 1]*[cos(theta4) -sin(theta4) 0 0; sin(theta4) cos(theta4) 0 0; 0 0 1 0; 0 0 0 1];
+T34=[1 0 0 1; 0 0 -1 0; 0 1 0 0; 0 0 0 1]*[cos(theta4) -sin(theta4) 0 0; sin(theta4) cos(theta4) 0 0; 0 0 1 0; 0 0 0 1];
 
 T04=T01*T12*T23*T34;
 p0=T04*p4;
@@ -21,7 +21,7 @@ p0=T04*p4;
 
 %reverse kinematics
 xactual=[8.3628;1.5915;30.4356;1];
-p4=[5;5;10;1];
+p4=[5;5;16;1];
 q=[0;0;pi/4;pi/4];
 [TT24,jacT]=jacobianT(q,p4);
 x=TT24*p4; 
@@ -46,5 +46,5 @@ deltaz=xactual(3)-x(3);
     else
     q(2)=q(2)+deltaz;
     end
-T04=Transpose(q);
+T04=Transfer(q);
 x=T04*p4;
