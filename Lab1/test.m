@@ -22,13 +22,15 @@ p0=T04*p4;
 %reverse kinematics
 xactual=[8.3628;1.5915;30.4356;1];
 p4=[5;5;16;1];
-q=[0;0;pi/4;pi/4];
+%q=[13;5;pi/4;pi/4];
+q=[13;5;0;0];
 [TT24,jacT]=jacobianT(q,p4);
 x=TT24*p4; 
 deltax = xactual-x;
 a=sqrt((deltax(1)^2)+(deltax(2)^2));
-while a>0.05
-    deltaq=transpose(jacT)*deltax/5;
+while a>0.01
+    deltaq=transpose(jacT)*deltax/5;%devide 5 to decrease the step
+                                    %   for approach
     q(3)=mod(deltaq(3)+q(3),2*pi);
     q(4)=mod(deltaq(4)+q(4),2*pi);
     [TT24,jacT]=jacobianT(q,p4);
@@ -37,14 +39,15 @@ while a>0.05
     a=sqrt((deltax(1)^2)+(deltax(2)^2));
 end
 deltaz=xactual(3)-x(3);
-    if (q(2)+deltaz)>11
-    q(1)=q(1)+q(2)+deltaz-11;
+    if deltaz>11
+    q(1)=deltaz-11;
     q(2)=11;
-    elseif (q(2)+deltaz)<0
-    q(1)=q(1)+(q(2)+deltaz);
-    q(2)=0;
+%     elseif deltaz<0
+%     q(1)=q(1)+(q(2)+deltaz);
+%     q(2)=0;
     else
-    q(2)=q(2)+deltaz;
+    q(2)=deltaz;
+    q(1) = 0;
     end
 T04=Transfer(q);
 x=T04*p4;
